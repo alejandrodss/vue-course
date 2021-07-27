@@ -19,6 +19,7 @@
 </template>
 
 <script>
+import { mapState, mapActions, mapGetters } from 'vuex'
 import Column from '@/components/Column'
 
 export default {
@@ -30,17 +31,33 @@ export default {
   },
   data () {
     return {
-      listName: '',
-      boardList: [
-        { id: '1', name: 'Todo' },
-        { id: '2', name: 'Doing' }
-      ]
+      listName: ''
+    }
+  },
+  computed: {
+    ...mapState([
+      'fetchingData'
+    ]),
+    ...mapGetters([
+      'getListsByBoard'
+    ]),
+    boardList () {
+      return this.getListsByBoard(this.id)
     }
   },
   methods: {
+    ...mapActions([
+      'fetchLists',
+      'addColumn'
+    ]),
     add () {
-      this.boardList.push({ name: this.listName })
+      this.addColumn({ name: this.listName, board: this.id })
+      this.listName = ''
     }
+  },
+
+  created () {
+    this.fetchLists({ board: this.id })
   }
 }
 </script>

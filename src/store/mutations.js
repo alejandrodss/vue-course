@@ -42,7 +42,8 @@ export default {
   [types.FETCH_TASKS_SUCCESS] (state, { tasks }) {
     state.fetchingData = false
     state.error = null
-    state.tasks = { ...tasks }
+    // state.tasks = { ...tasks }
+    state.tasks = Object.assign({}, state.tasks, tasks)
   },
 
   [types.FETCH_TASKS_FAILURE] (state, { error }) {

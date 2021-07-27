@@ -5,12 +5,13 @@
     </header>
     <task-list
       :listId="listId"
-      :tasks="taskList">
+      :tasks="tasksList">
     </task-list>
   </section>
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex'
 import TaskList from './TaskList'
 
 export default {
@@ -20,13 +21,22 @@ export default {
     listId: String,
     name: String
   },
-  data () {
-    return {
-      taskList: [
-        { id: '1', title: 'Review MDN', completed: false },
-        { id: '2', title: 'Learn VueX', completed: false }
-      ]
+  computed: {
+    ...mapGetters([
+      'getTasksFromList'
+    ]),
+    tasksList () {
+      return this.getTasksFromList(this.listId)
     }
+  },
+  methods: {
+    ...mapActions([
+      'fetchTasks'
+    ])
+  },
+
+  created () {
+    this.fetchTasks({ list: this.listId })
   }
 }
 </script>
